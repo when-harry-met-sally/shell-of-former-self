@@ -1,47 +1,30 @@
 #!/usr/bin/env zsh
 
-# Source the constants file
-source ./constants.zsh
+CUR=$(dirname "$0")
+source $CUR/constants.zsh 
 
 # Function to check if a tmux session exists
 session_exists() {
-    local session_name="$1"
-    tmux has-session -t "${session_name}" 2>/dev/null
+    tmux has-session -t "$SESSION_NAME" 2>/dev/null
 }
 
-# Function to get the name of the first window in a session
-get_first_window_name() {
+# Function to move a window from a specific session to the current session and attach to it
+move_window_to_current_session() {
     local session_name="$1"
-    tmux list-windows -t "${session_name}" -F '#{window_name}' | head -n 1
-}
+    # Create a new window in the "$SESSION_NAME" session but don't switch to it
+    tmux move-window -s $session_name:0 -t :
 
-# Function to get the name of the currently running program in the first pane of a window
-get_pane_program_name() {
-    local session_name="$1"
-    local window_name="$2"
-    tmux list-panes -t "${session_name}:${window_name}" -F '#{pane_current_command}' | head -n 1
+    tmux new-window -d -t "$session_name"
 }
 
 # Main logic
 if [[ -n "$TMUX" ]]; then  # Check if inside a tmux session
     if session_exists "$SESSION_NAME"; then
-        # Get the name of the first window in the "$SESSION_NAME" session
-        first_window_name=$(get_first_window_name "$SESSION_NAME")
-        
-        # Switch to the first window of the "$SESSION_NAME" session
-        tmux switch-client -t "$SESSION_NAME"
-        tmux select-window -t "${first_window_name}"
-
-        # Get the name of the currently running program in the first pane of the first window
-        program_name=$(get_pane_program_name "$SESSION_NAME" "${first_window_name}")
-        
-        # Rename the window to the program name
-        tmux rename-window "${program_name}"
-
-        # Create a new "PRELOAD" window in the "$SESSION_NAME" session but don't switch to it
-        tmux new-window -d -t "$SESSION_NAME" -n 'PRELOAD'
+        move_window_to_current_session "$SESSION_NAME"
     else
         echo "Session '$SESSION_NAME' does not exist."
+        # Optionally, create the session if it doesn't exist
+        # tmux new-session -d -s "$SESSION_NAME"
     fi
 else
     echo "No tmux session is active."
