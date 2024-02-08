@@ -11,7 +11,7 @@ create_preload_session() {
       tmux new-session -d -s "$SESSION_NAME" &
 
       # Create additional new windows in the same session
-      for (( i = 1; i < ${NUM_WINDOWS:=2}; i++ )); do
+      for (( i = 1; i < ${NUM_WINDOWS:=5}; i++ )); do
         tmux new-window -d -t "$SESSION_NAME" &
       done
     fi
