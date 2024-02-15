@@ -18,15 +18,15 @@ fi
 
 # Streamline capturing pane content by avoiding unnecessary calls to external commands
 while IFS= read -r line; do
-    window_id=$(echo "$line" | awk '{print $1}')
+    window_id=${line%% *}
     window_file="${temp_dir}/${window_id}.txt"
     tmux list-panes -t "$window_id" -F '#{pane_id}' | while IFS= read -r pane_id; do
         tmux capture-pane -e -t "$pane_id" -p -S -10 >> "$window_file"
     done
 done <<< "$windows"
 
-# Use fzf for fuzzy selection without creating subprocesses for preview command
-chosen_window=$(echo "$windows" | fzf --cycle --preview-window=down:70%:wrap --preview="cat ${temp_dir}/\$(echo {} | awk '{print \$1}').txt" --header="Window ID | Window Name | Path" --delimiter=' ' --with-nth=2..)
+# Use fzf for fuzzy selection with preview command positioned to the left
+chosen_window=$(echo "$windows" | fzf --cycle --preview-window=right:50%:wrap --preview="cat ${temp_dir}/\$(echo {} | awk '{print \$1}').txt" --header="Window ID | Window Name | Path" --delimiter=' ' --with-nth=2..)
 
 # Remove the temporary directory
 rm -rf "$temp_dir"
