@@ -10,7 +10,9 @@ create_preload_session() {
       # If there is no session with $SESSION_NAME, create it with a window
       # Redirect all output to /dev/null, including standard and error outputs
       tmux new-session -d -s "$SESSION_NAME" > /dev/null 2>&1 &
+      disown
       tmux new-window -d -t "$SESSION_NAME" > /dev/null 2>&1 &
+      disown
     fi
   fi
 }
