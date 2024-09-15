@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 CUR=$(dirname "$0")
 source $CUR/constants.zsh 

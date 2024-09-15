@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 # Get the current window ID to exclude it from the list
 current_window=$(tmux display-message -p '#{window_id}')
