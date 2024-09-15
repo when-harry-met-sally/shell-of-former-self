@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-CUR=$(dirname "$0")
-source $CUR/constants.sh
-
 create_preload_session() {
   if [[ -n "$TMUX" ]]; then  # Check if inside a tmux session
     # Check if a session named $SESSION_NAME exists

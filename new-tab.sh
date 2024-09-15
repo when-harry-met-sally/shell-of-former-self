@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-CUR=$(dirname "$0")
-source $CUR/constants.zsh 
-
 # Function to check if a tmux session exists
 session_exists() {
     tmux has-session -t "$SESSION_NAME" 2>/dev/null

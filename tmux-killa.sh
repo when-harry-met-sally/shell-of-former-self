@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Temporary files for tmux window names
 INITIAL_WINDOWS=$(mktemp)

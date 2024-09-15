@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Create a temporary directory for storing window previews
 temp_dir=$(mktemp -d -t tmux_window_preview.XXXXXX)
 
