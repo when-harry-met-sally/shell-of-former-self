@@ -19,17 +19,13 @@
           src = self;
 
           buildInputs = [ pkgs.bash pkgs.tmux pkgs.fzf ];
-          nativeBuildInputs = [ pkgs.makeWrapper ];
+          nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 
           installPhase = ''
             mkdir -p $out/bin
             cp $src/*.sh $out/bin/
             chmod +x $out/bin/*.sh
             mv $out/bin/cli.sh $out/bin/shellOfFormerSelf
-
-            # Wrap the main script to include dependencies in PATH
-            ${pkgs.makeWrapper}/bin/makeWrapper $out/bin/shellOfFormerSelf $out/bin/shellOfFormerSelf \
-              --prefix PATH : "${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.tmux}/bin:${pkgs.fzf}/bin"
           '';
         };
       };
